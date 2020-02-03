@@ -1,0 +1,15 @@
+version: "2"
+
+services:
+  zeebe:
+    restart: always
+    container_name: zeebe_broker
+    image: camunda/zeebe:0.22.1
+    environment:
+      - ZEEBE_LOG_LEVEL=debug
+    volumes:
+      - ./zeebe.cfg.toml:/usr/local/zeebe/conf/zeebe.cfg.toml
+      - ./target/zeebe-incident-alerter-1.0-SNAPSHOT.jar:/usr/local/zeebe/lib/zeebe-incident-alerter-1.0-SNAPSHOT.jar
+    ports:
+      - "26500:26500"
+      - "9600:9600"

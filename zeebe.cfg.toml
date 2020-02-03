@@ -1,0 +1,3 @@
+[[exporters]]
+id = "incidents"
+className = "io.zeebe.IncidentAlerter"
