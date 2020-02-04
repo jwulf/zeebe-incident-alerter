@@ -1,16 +1,10 @@
 package io.zeebe;
 
-import com.github.michaelbull.retry.policy.binaryExponentialBackoff
-import com.github.michaelbull.retry.policy.limitAttempts
-import com.github.michaelbull.retry.policy.plus
-import com.github.michaelbull.retry.retry
 import io.zeebe.exporter.api.Exporter
 import io.zeebe.exporter.api.context.Context
 import io.zeebe.exporter.api.context.Controller
 import io.zeebe.protocol.record.Record
 import io.zeebe.protocol.record.intent.IncidentIntent
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import org.slf4j.Logger
@@ -69,25 +63,18 @@ class IncidentAlerter: Exporter
         }
     }
 
-    private fun postIncident(record: Record<*>) = runBlocking {
-        retry(limitAttempts(20) + binaryExponentialBackoff(base = 10L, max = 5000L)) {
-            doPost(record)
-        }
-    }
-
-    private fun doPost(record: Record<*>) {
+    private fun postIncident(record: Record<*>) {
         val jSON = "application/json; charset=utf-8".toMediaType()
         val body = record.toJson().toString().toRequestBody(jSON)
-        val request = Request.Builder()
-                .addHeader("Authorization", "Bearer $token")
-                .url(url)
+        val rb = Request.Builder()
+        if (token == "") rb.addHeader("Authorization", "Bearer $token")
+        val request = rb.url(url)
                 .post(body)
                 .build()
-        val c = client.newCall(request).enqueue(object : Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 log.error("Incident Alerter - sending alert to $url failed!")
                 e.printStackTrace()
-                throw(e)
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -97,10 +84,10 @@ class IncidentAlerter: Exporter
                     }
 
                     for ((name, value) in response.headers) {
-                        println("$name: $value")
+                        log.debug("$name: $value")
                     }
 
-                    println(response.body!!.string())
+                    log.debug(response.body!!.string())
                 }
             }
         })
