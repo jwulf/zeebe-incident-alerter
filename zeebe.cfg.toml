@@ -5,4 +5,4 @@ className = "io.zeebe.IncidentAlerter"
     [exporters.args]
 #    url="https://webhook.site/ab7f7c02-5f87-4ef2-b355-e083a44284eb"
     url="http://127.0.0.1"
-    # token="Some token for authorization header `Bearer ${token}`
+    # token="Some token for authorization header"
