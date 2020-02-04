@@ -67,7 +67,7 @@ class IncidentAlerter: Exporter
         val jSON = "application/json; charset=utf-8".toMediaType()
         val body = record.toJson().toString().toRequestBody(jSON)
         val rb = Request.Builder()
-        if (token == "") rb.addHeader("Authorization", "Bearer $token")
+        if (token !== "") rb.addHeader("Authorization", "Bearer $token")
         val request = rb.url(url)
                 .post(body)
                 .build()
