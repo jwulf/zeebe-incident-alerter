@@ -4,7 +4,10 @@ import io.zeebe.exporter.api.Exporter
 import io.zeebe.exporter.api.context.Context
 import io.zeebe.exporter.api.context.Controller
 import io.zeebe.protocol.record.Record
+import io.zeebe.protocol.record.intent.IncidentIntent
+import io.zeebe.protocol.record.intent.Intent
 import org.slf4j.Logger
+//import com.squareup.okhttp3
 
 @Suppress("unused")
 class IncidentAlerter: Exporter
@@ -27,7 +30,9 @@ class IncidentAlerter: Exporter
     override fun close() {}
 
     override fun export(record: Record<*>) {
-        log.info(record.toString())
-        this.controller.updateLastExportedRecordPosition(record.position);
+        if (record.intent == IncidentIntent.CREATED) {
+            log.info(record.toString())
+        }
+        this.controller.updateLastExportedRecordPosition(record.position)
     }
 }

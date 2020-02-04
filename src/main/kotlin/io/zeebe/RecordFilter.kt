@@ -10,8 +10,7 @@ class RecordFilter: Context.RecordFilter {
     }
 
     override fun acceptValue(valueType: ValueType?): Boolean {
-        val isIncident = valueType?.equals(ValueType.INCIDENT);
-        return isIncident ?: false
+        return valueType?.equals(ValueType.INCIDENT) ?: false
     }
 
 }
