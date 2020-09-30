@@ -30,7 +30,7 @@ className = "io.zeebe.IncidentAlerter"
 
     [exporters.args]
     url="https://your-webhook-endpoint"
-    # token="Some optional token for authorization header `Bearer ${token}`
+    # token="Some optional token for authorization header"
 ```
 
 The payload posted to your webhook looks like this: 
