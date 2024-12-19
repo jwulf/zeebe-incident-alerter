@@ -1,5 +1,7 @@
 # Zeebe Incident Alerter
 
+**DEPRECATED**: Camunda 8 changes the API and this exporter will not work with Camunda 8.
+
 This Zeebe exporter will call a configured webhook on the creation of an incident. 
 
 See the notes on "Loss of Alerts" and "Mitigation and System Design", before using this in production!
